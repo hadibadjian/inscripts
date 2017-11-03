@@ -62,7 +62,7 @@ limit_req_zone \$binary_remote_addr zone=reqperip:10m rate=1r/s;
 limit_req_zone \$server_name zone=reqperserver:10m rate=10r/s;
 
 upstream railsapp {
-  server unix:/var/vhosts/puma.sock;
+  server unix:/var/vhosts/railsapp/shared/tmp/sockets/puma.socket;
 }
 
 # Config for vhost
