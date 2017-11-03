@@ -2,7 +2,7 @@
 
 # Create shared resources
 sudo mkdir -p /var/vhosts/railsapp/shared/config
-sudo chown -R ubuntu:ubuntu /var/vhosts/
+sudo chown -R deploy:deploy /var/vhosts/
 
 nginx_conf='
 user www-data;

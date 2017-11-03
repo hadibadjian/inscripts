@@ -12,8 +12,9 @@ touch ${SSHD_CONFIG_PATH}
 
 config="
 Protocol 2
-ListenAddress ${LISTEN_ADDRESS}
 Port 22
+
+AddressFamily inet
 
 Ciphers aes256-cbc,aes256-ctr
 HostKeyAlgorithms ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,ssh-rsa,ssh-dss
@@ -35,7 +36,7 @@ PermitRootLogin no
 StrictModes yes
 
 PubkeyAuthentication yes
-AuthorizedKeysFile /etc/ssh/authorized-keys/%u
+AuthorizedKeysFile %h/.ssh/authorized_keys
 
 IgnoreRhosts yes
 HostbasedAuthentication no
@@ -59,3 +60,13 @@ Subsystem sftp /usr/lib/openssh/sftp-server
 echo "${config}" | sudo tee "${SSHD_CONFIG_PATH}"
 
 sudo systemctl restart sshd.service
+
+echo "
+WARN: Disable ChallengeResponseAuthentication once the public key authentication is configured.
+
+Copy the key:
+ssh-copy-id -i ~/.ssh/mykey user@host
+
+Test the key:
+ssh -i ~/.ssh/mykey user@host
+"
