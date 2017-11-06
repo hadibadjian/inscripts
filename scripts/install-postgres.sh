@@ -1,9 +1,18 @@
 #!/usr/bin/env bash
 
 VERSION=10
-DATABASE=project_name
-DATABASE_PASSWORD=xxx
 POSTGRES_PASSWORD=xxx
+DATABASE_NAME=xxx
+
+if [[ "$POSTGRES_PASSWORD" == 'xxx' ]]; then
+  echo 'postgres role password not configured.'
+  exit
+fi
+
+if [[ "$DATABASE_NAME" == 'xxx' ]]; then
+  echo 'Database name not configured.'
+  exit
+fi
 
 sudo add-apt-repository "deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main"
 wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | \
@@ -11,7 +20,7 @@ wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | \
 
 sudo apt-get update
 
-sudo apt-get install -y postgresql-${VERSION} postgresql-contrib-${VERSION}
+sudo apt-get install -y libpq-dev postgresql-${VERSION} postgresql-contrib-${VERSION}
 
 echo ""
 echo "INFO: Setting postgres role password.."
@@ -21,12 +30,8 @@ sudo passwd postgres
 echo ""
 echo "INFO: Configuring postgresql.."
 
-sudo su postgres <<EOF
-psql -d template1 -c "ALTER ROLE postgres WITH ENCRYPTED PASSWORD '$POSTGRES_PASSWORD';"
-psql -d template1 -c "CREATE USER DATABASE WITH ENCRYPTED PASSWORD '$DATABASE_PASSWORD';"
-psql -d template1 -c "CREATE DATABASE DATABASE;"
-psql -d template1 -c "GRANT ALL PRIVILEGES ON DATABASE DATABASE TO DATABASE;"
-EOF
+sudo su postgres psql -d template1 -c "ALTER ROLE postgres WITH ENCRYPTED PASSWORD '${POSTGRES_PASSWORD}';"
+sudo su postgres psql -d template1 -c "CREATE DATABASE ${DATABASE_NAME};"
 
 echo "
 ---
