@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-LISTEN_ADDRESS=0.0.0.0
 SSHD_CONFIG_PATH='/etc/ssh/sshd_config'
 
 sudo apt-get install -y openssh-server
