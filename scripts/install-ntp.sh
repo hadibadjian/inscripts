@@ -12,4 +12,4 @@ EOF
 
 echo "${TIME_SERVERS}"  | sudo tee /etc/ntp.conf
 
-sudo service ntp restart
+sudo systemctl restart ntp.service
