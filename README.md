@@ -57,6 +57,7 @@ install-openssh-server.sh
 # Configure deploy's SSH access via public key.
 # Disable SSH password authentication and restart SSH daemon service.
 
+config-nginx-conf.sh
 config-nginx-vhost.sh
 
 sudo adduser postgres
