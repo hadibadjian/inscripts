@@ -73,11 +73,20 @@
 
 __Note__: For deployments using Capistrano, use `cap ENVIRONMENT deploy:initial` on the first instance.
 
-## Puma systemd Service
+## systemd Service Examples
+
+- Create the services in `/lib/systemd/system` folder.
+- Reload systemd manager configuration: `systemctl daemon-reload`
+- Enable the service: e.g. `systemctl enable puma.service`
+- Start the service: e.g. `systemctl start puma.service`
+
+### Puma systemd Service
 
 __Note__: You may need to modify `WorkingDirectory` and `ExecStart` options based on your deployment.
 
 ```bash
+# /lib/systemd/system/puma.service
+
 [Unit]
 Description=Puma HTTP Server
 After=network.target
@@ -95,11 +104,13 @@ WantedBy=multi-user.target
 
 ```
 
-## Delayed Job systemd Service
+### Delayed Job systemd Service
 
 __Note__: You may need to modify `WorkingDirectory`, `ExecStart` and `ExecStop` options based on your deployment.
 
 ```bash
+# /lib/systemd/system/delayedjob.service
+
 [Unit]
 Description=Delayed Jobs Cron
 After=network.target
