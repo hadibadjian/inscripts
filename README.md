@@ -21,45 +21,6 @@ A collection of scripts to automate installation and configuration of tools and 
 
 # Rails, Nginx and Postgres Stack
 
+Please refer to [nginx-rails-puma-postgres setup](stacks/nginx-rails-puma-postgres.md) checklist.
+
 Tested on __Ubuntu Server Xenial 16.04__.
-
-```bash
-# Upgrade installed packages.
-apt-get update && apt-get upgrade -y
-
-# Install dependencies.
-apt-get install -y curl unzip ntp software-properties-common libpq-dev
-
-# Get inscripts.
-wget https://github.com/hadibadjian/inscripts/archive/master.zip
-unzip master.zip
-
-cd isncripts-master/scripts/
-
-install-ntp.sh
-install-fail2ban.sh
-install-nginx.sh
-install-git.sh
-install-nodejs.sh
-
-# Whitelist IPs for incoming SSH connection.
-config-firewall.sh
-
-install-ruby.sh
-
-# create deploy user
-sudo adduser deploy
-# Add deploy to rvm group
-sudo adduser deploy rvm
-
-install-openssh-server.sh
-# Once OpenSSH daemon is configured, root access via SSH is blocked.
-# Configure deploy's SSH access via public key.
-# Disable SSH password authentication and restart SSH daemon service.
-
-config-nginx-conf.sh
-config-nginx-vhost.sh
-
-sudo adduser postgres
-install-postgres.sh
-```

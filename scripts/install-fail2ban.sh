@@ -12,7 +12,7 @@ sudo apt install -y fail2ban
 # ddos filter script
 echo "
 [Definition]
-failregex = limiting requests, excess:.* by zone.*client:
+failregex = limiting requests, excess:.* by zone.*client: <HOST>
 ignoreregex =
 
 " | sudo tee /etc/fail2ban/filter.d/nginx-ddos.conf
@@ -23,9 +23,9 @@ echo "
 actionstart =
 actionstop =
 actioncheck =
-actionban = IP= &&
-            printf %%b ": $IP\n" >>
-actionunban = IP= && sed -i.old /ALL:\ $IP/d
+actionban = IP=<ip> &&
+            printf %%b \"<daemon_list>: $IP\n\" >> <file>
+actionunban = echo \"/^<daemon_list>: <ip>$/<br>d<br>w<br>q\" | ed <file>
 
 [Init]
 file = /etc/hosts.deny

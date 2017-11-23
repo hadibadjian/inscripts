@@ -2,6 +2,8 @@
 
 sudo apt-get install -y ntp
 
+sudo timedatectl set-timezone Australia/Melbourne
+
 TIME_SERVERS=$(cat <<EOF
 server 0.ubuntu.pool.ntp.org
 server 1.ubuntu.pool.ntp.org

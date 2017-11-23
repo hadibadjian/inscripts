@@ -33,4 +33,10 @@ Only listen to remote addresses you trust:
 
   examples:
     listen_addresses = '192.168.0.102'
+
+Start:
+  systemctl start postgresql@${VERSION}-main.service
+
+Enable autostart on boot:
+  systemctl enable postgresql@${VERSION}-main.service
 "
