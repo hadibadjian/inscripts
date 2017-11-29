@@ -1,0 +1,25 @@
+[DEFAULT]
+bantime  = 604800
+findtime = 3600
+maxretry = 2
+
+[sshd]
+enabled = true
+
+[sshd-ddos]
+enabled = true
+
+[nginx-http-auth]
+enabled = true
+
+[nginx-botsearch]
+enabled = true
+
+[nginx-ddos]
+enabled   = true
+port      = http,https
+banaction = hostsdeny
+findtime  = 120
+bantime   = 7200
+maxretry  = 30
+logpath   = %(nginx_error_log)s
