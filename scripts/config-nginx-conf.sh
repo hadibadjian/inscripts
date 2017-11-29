@@ -13,12 +13,18 @@ events {
 }
 
 http {
-  sendfile on;
-  tcp_nopush on;
-  tcp_nodelay on;
+  access_log /var/log/nginx/access.log;
+  error_log /var/log/nginx/error.log;
+
   keepalive_timeout 65;
-  types_hash_max_size 2048;
+  sendfile on;
   server_tokens off;
+  tcp_nodelay on;
+  tcp_nopush on;
+  types_hash_max_size 2048;
+
+  real_ip_header X-Forwarded-For;
+  set_real_ip_from 192.168.255.0/24;
 
   # server_name_in_redirect off;
   server_names_hash_max_size 512;
@@ -26,9 +32,6 @@ http {
 
   include /etc/nginx/mime.types;
   default_type application/octet-stream;
-
-  access_log /var/log/nginx/access.log;
-  error_log /var/log/nginx/error.log;
 
   gzip on;
   gzip_disable \"msie6\";

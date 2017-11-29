@@ -8,7 +8,7 @@ vhost_conf="
 limit_conn_zone \$binary_remote_addr zone=connperip:10m;
 limit_conn_zone \$server_name zone=connperserver:10m;
 
-limit_req_zone \$binary_remote_addr zone=reqperip:10m rate=1r/s;
+limit_req_zone \$binary_remote_addr zone=reqperip:10m rate=2r/s;
 limit_req_zone \$server_name zone=reqperserver:10m rate=10r/s;
 
 upstream railsapp {
@@ -19,14 +19,13 @@ upstream railsapp {
 server {
   listen 80 default_server;
 
+  server_name example.com
+
   limit_conn connperip 10;
   limit_conn connperserver 100;
 
   limit_req zone=reqperip burst=5 nodelay;
   limit_req zone=reqperserver burst=10;
-
-  access_log /var/log/nginx/railsapp.access.log;
-  error_log /var/log/nginx/railsapp.error.log;
 
   root /var/vhosts/railsapp/current/public;
 
@@ -51,6 +50,13 @@ server {
     proxy_set_header  Host \$host;
     proxy_set_header  X-Real-IP \$remote_addr;
     proxy_set_header  X-Forwarded-For \$proxy_add_x_forwarded_for;
+
+    proxy_set_header  X-Forwarded-For $scheme;
+
+    if (\$http_x_forwarded_proto = \"http\") {
+      rewrite  ^/(.*)$  https://example.com/\$1 permanent;
+    }
+
     proxy_pass        http://railsapp;
   }
 
@@ -74,4 +80,14 @@ echo "${vhost_conf_file}"
 echo "${vhost_conf}" | sudo tee "${vhost_conf_file}"
 sudo ln -s "${vhost_conf_file}" "${vhost_conf_sym_file}"
 
-sudo systemctl restart nginx.service
+echo "
+Make sure to change example.com in the server_name and protocol redirect clause.
+
+  server_name example.com
+
+  rewrite  ^/(.*)$  https://example.com/\$1 permanent;
+
+Restart nginx for the changes to take place:
+
+  sudo systemctl restart nginx.service
+"
